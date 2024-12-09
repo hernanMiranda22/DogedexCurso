@@ -6,4 +6,11 @@
     <string name="group">Group</string>
     <string name="male">Male</string>
     <string name="dogImageContentDescription">dogImage</string>
+    <string name="heart_icon">heartIcon</string>
+    <string name="error_showing_dog_not_found">Error showing dog, dog not found</string>
+    <string name="dog_index_format">#%d</string>
+    <string name="dog_life_expectancy_format">%s years</string>
+    <string name="unknown_host_exception">No hay internet"</string>
+    <string name="unknown_error">Error desconocido</string>
+    <string name="todo">TODO</string>
 </resources>

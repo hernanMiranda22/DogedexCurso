@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.parcelize)
 }
 
 android {
@@ -53,6 +54,10 @@ dependencies {
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.moshi)
     implementation(libs.retrofit2.gson)
+
+    //coil image
+    implementation(libs.coil)
+    implementation(libs.coil.network)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
