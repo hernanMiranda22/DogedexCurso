@@ -1,6 +1,6 @@
 package com.example.dogedex.doglist
 
-import com.example.dogedex.Dog
+import com.example.dogedex.model.Dog
 import com.example.dogedex.api.ApiResponseStatus
 import com.example.dogedex.api.DogsApi.retrofitService
 import com.example.dogedex.api.dto.DogDTOMapper

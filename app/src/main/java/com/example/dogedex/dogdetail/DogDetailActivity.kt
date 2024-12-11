@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import coil3.load
-import com.example.dogedex.Dog
+import com.example.dogedex.model.Dog
 import com.example.dogedex.R
 import com.example.dogedex.databinding.ActivityDogDetailBinding
 import com.example.dogedex.parcelable

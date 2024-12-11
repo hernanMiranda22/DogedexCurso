@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.parcelize)
+    kotlin("plugin.serialization") version "2.0.21"
+    alias(libs.plugins.safeArgs)
 }
 
 android {
@@ -58,6 +60,10 @@ dependencies {
     //coil image
     implementation(libs.coil)
     implementation(libs.coil.network)
+
+    //nav graph
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
