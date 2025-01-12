@@ -6,8 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.dogedex.api.ApiServiceInterceptor
 import com.example.dogedex.auth.LoginActivity
 import com.example.dogedex.databinding.ActivityMainBinding
+import com.example.dogedex.doglist.DogListActivity
 import com.example.dogedex.model.User
 import com.example.dogedex.settings.SettingsActivity
 
@@ -28,11 +30,21 @@ class MainActivity : AppCompatActivity() {
         if (user == null){
             openLoginActivity()
             return
+        }else{
+            ApiServiceInterceptor.setSessionToken(user.authenticationToken)
         }
 
         binding.settingFab.setOnClickListener {
             openSettingActivity()
         }
+
+        binding.dogListFab.setOnClickListener {
+            openDogListActivity()
+        }
+    }
+
+    private fun openDogListActivity() {
+        startActivity(Intent(this,DogListActivity::class.java))
     }
 
     private fun openSettingActivity() {

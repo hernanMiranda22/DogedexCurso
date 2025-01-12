@@ -48,6 +48,9 @@ class DogListActivity : AppCompatActivity() {
             intent.putExtra(DOG_DETAIL, it)
             startActivity(intent)
         }
+        adapter.setLongItemClickListener {
+            dogListViewModel.addDogToUser(it.id)
+        }
 
         dogListViewModel.dogList.observe(this){ dogList ->
             adapter.submitList(dogList)
