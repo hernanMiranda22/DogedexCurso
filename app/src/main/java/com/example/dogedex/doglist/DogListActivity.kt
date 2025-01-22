@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dogedex.R
 import com.example.dogedex.api.ApiResponseStatus
 import com.example.dogedex.databinding.ActivityDocListBinding
@@ -47,9 +46,6 @@ class DogListActivity : AppCompatActivity() {
             val intent = Intent(this, DogDetailActivity::class.java)
             intent.putExtra(DOG_DETAIL, it)
             startActivity(intent)
-        }
-        adapter.setLongItemClickListener {
-            dogListViewModel.addDogToUser(it.id)
         }
 
         dogListViewModel.dogList.observe(this){ dogList ->

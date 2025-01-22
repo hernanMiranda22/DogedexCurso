@@ -3,7 +3,7 @@ package com.example.dogedex.api.dto
 import com.example.dogedex.model.Dog
 
 class DogDTOMapper {
-    private fun fromDogDtoToDogDomain(dogDTO: DogDTO): Dog {
+    fun fromDogDtoToDogDomain(dogDTO: DogDTO): Dog {
         return Dog(
             id = dogDTO.id,
             index = dogDTO.index,
@@ -19,7 +19,7 @@ class DogDTOMapper {
         )
     }
 
-    fun fromDogDTOListToDogDomainList(dogDTOList : List<DogDTO>) : List<Dog> {
+    fun fromDogDTOListToDogDomainList(dogDTOList: List<DogDTO>): List<Dog> {
         return dogDTOList.map { fromDogDtoToDogDomain(it) }
     }
 }

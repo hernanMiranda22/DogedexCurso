@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.parcelize)
     kotlin("plugin.serialization") version "2.0.21"
     alias(libs.plugins.safeArgs)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -39,6 +40,7 @@ android {
     }
     buildFeatures{
         dataBinding = true
+        compose = true
     }
 }
 
@@ -60,12 +62,41 @@ dependencies {
     //coil image
     implementation(libs.coil)
     implementation(libs.coil.network)
+    implementation(libs.coil.compose)
 
     //nav graph
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
 
+    //cameraX
+    implementation(libs.androidx.camerax)
+    implementation(libs.androidx.camerax.lifecycle)
+    implementation(libs.androidx.camerax.view)
+
+    //tensor flow lite
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.support)
+
+    //Compose
+    implementation(platform(libs.androidx.compose.boom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.founation)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.preview)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.viewmodel)
+    implementation(libs.androidx.compose.activity)
+    implementation(libs.androidx.compose.icon.core)
+    implementation(libs.androidx.compose.icon.extends)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(libs.androidx.compose.testing.unit)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.boom))
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
 }

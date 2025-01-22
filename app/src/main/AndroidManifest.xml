@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -15,9 +18,17 @@
         android:theme="@style/Theme.Dogedex"
         tools:targetApi="31">
         <activity
-            android:name=".settings.SettingsActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".dogdetail.DogDetailComposeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dog_detail_compose"
+            android:theme="@style/Theme.Dogedex" />
+        <activity
+            android:name=".WholeImageActivity"
             android:exported="false" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".auth.LoginActivity"
             android:exported="false" />
@@ -26,10 +37,10 @@
             android:exported="false" />
         <activity
             android:name=".doglist.DogListActivity"
-            android:parentActivityName=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".main.MainActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

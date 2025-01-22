@@ -3,6 +3,7 @@ package com.example.dogedex.api
 import com.example.dogedex.ADD_DOG_TO_USER_URL
 import com.example.dogedex.BASE_URL
 import com.example.dogedex.GET_ALL_DOGS
+import com.example.dogedex.GET_DOG_BY_ML_ID
 import com.example.dogedex.GET_USER_DOGS_URL
 import com.example.dogedex.SIGN_IN_URL
 import com.example.dogedex.SIGN_UP_URL
@@ -12,6 +13,7 @@ import com.example.dogedex.api.dto.SignUpDTO
 import com.example.dogedex.api.responses.DogListApiResponse
 import com.example.dogedex.api.responses.AuthApiResponse
 import com.example.dogedex.api.responses.DefaultResponse
+import com.example.dogedex.api.responses.DogApiResponse
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,6 +21,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 private val okHttpClient = OkHttpClient
     .Builder()
@@ -48,6 +51,9 @@ interface ApiService {
     @Headers("${ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY}: true")
     @GET(GET_USER_DOGS_URL)
     suspend fun getUserDogs(): DogListApiResponse
+
+    @GET(GET_DOG_BY_ML_ID)
+    suspend fun getDogByMlId(@Query("ml_id") mlId : String) : DogApiResponse
 }
 
 object DogsApi {
