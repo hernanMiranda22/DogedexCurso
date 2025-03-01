@@ -1,44 +1,52 @@
 package com.example.dogedex.auth
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dogedex.api.ApiResponseStatus
 import com.example.dogedex.model.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel:ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val authRepository : AuthTasks
+) :ViewModel() {
 
-    private val authRepository = AuthRepository()
+    //private val authRepository = AuthRepository()
 
-    private val _userLiveData = MutableLiveData<User>()
-    val userLivedata : LiveData<User>
-        get() = _userLiveData
+    var user = mutableStateOf<User?>(null)
+        private set
 
-    private val _uiState = MutableLiveData<ApiResponseStatus<User>>()
-    val uiState : LiveData<ApiResponseStatus<User>>
-        get() = _uiState
+    var uiState = mutableStateOf<ApiResponseStatus<User>?>(null)
+        private set
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            _uiState.value = ApiResponseStatus.Loading()
+            uiState.value = ApiResponseStatus.Loading()
             handleResponseStatus(authRepository.login(email, password))
         }
     }
 
     fun signUp(email : String, password: String, passwordConfirm : String){
         viewModelScope.launch {
-           _uiState.value = ApiResponseStatus.Loading()
+           uiState.value = ApiResponseStatus.Loading()
             handleResponseStatus(authRepository.signUp(email, password, passwordConfirm))
         }
     }
 
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<User>){
         if (apiResponseStatus is ApiResponseStatus.Success){
-            _userLiveData.value = apiResponseStatus.data
+            user.value = apiResponseStatus.data
         }
-        _uiState.value = apiResponseStatus
+        uiState.value = apiResponseStatus
+    }
+
+    fun resetApiResponse() {
+        uiState.value = null
     }
 
 

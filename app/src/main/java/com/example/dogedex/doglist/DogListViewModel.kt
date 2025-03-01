@@ -1,24 +1,29 @@
 package com.example.dogedex.doglist
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dogedex.model.Dog
 import com.example.dogedex.api.ApiResponseStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DogListViewModel:ViewModel() {
+@HiltViewModel
+class DogListViewModel @Inject constructor(
+    private val dogRepository : DogTask
+):ViewModel() {
 
-    private val _dogList = MutableLiveData<List<Dog>>()
-    val dogList : LiveData<List<Dog>>
-        get() = _dogList
+    var dogList = mutableStateOf<List<Dog>>(listOf())
+        private set
 
-    private val _uiState = MutableLiveData<ApiResponseStatus<Any>>()
-    val uiState : LiveData<ApiResponseStatus<Any>>
-        get() = _uiState
 
-    private val dogRepository = DogRepository()
+    var uiState = mutableStateOf<ApiResponseStatus<Any>?>(null)
+        private set
+
+    //private val dogRepository = DogRepository()
 
     init {
         getDogCollection()
@@ -26,7 +31,7 @@ class DogListViewModel:ViewModel() {
 
     private fun getDogCollection(){
         viewModelScope.launch {
-            _uiState.value = ApiResponseStatus.Loading()
+            uiState.value = ApiResponseStatus.Loading()
            handleResponseStatus(dogRepository.getDogCollection())
         }
     }
@@ -34,9 +39,13 @@ class DogListViewModel:ViewModel() {
     @Suppress("UNCHECKED_CAST")
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<List<Dog>>) {
         if (apiResponseStatus is ApiResponseStatus.Success){
-            _dogList.value = apiResponseStatus.data
+            dogList.value = apiResponseStatus.data
         }
-        _uiState.value = apiResponseStatus as ApiResponseStatus<Any>
+        uiState.value = apiResponseStatus as ApiResponseStatus<Any>
+    }
+
+    fun resetApiResponse() {
+        uiState.value = null
     }
 
 }

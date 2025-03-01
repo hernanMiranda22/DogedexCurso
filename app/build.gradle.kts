@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kspApp)
     alias(libs.plugins.parcelize)
     kotlin("plugin.serialization") version "2.0.21"
     alias(libs.plugins.safeArgs)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hiltApp)
 }
 
 android {
@@ -91,6 +92,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.ui.graphics)
     androidTestImplementation(libs.androidx.compose.testing.unit)
+
+    //Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+
+    //hilt
+    implementation(libs.hilt)
+    implementation(libs.hilt.compose.navigation)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

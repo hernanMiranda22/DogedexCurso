@@ -26,18 +26,18 @@ import com.example.dogedex.api.ApiResponseStatus
 import com.example.dogedex.api.ApiServiceInterceptor
 import com.example.dogedex.auth.LoginActivity
 import com.example.dogedex.databinding.ActivityMainBinding
-import com.example.dogedex.dogdetail.DogDetailActivity
-import com.example.dogedex.dogdetail.DogDetailActivity.Companion.DOG_DETAIL
-import com.example.dogedex.dogdetail.DogDetailActivity.Companion.IS_RECOGNIZED_KEY
+import com.example.dogedex.dogdetail.DogDetailComposeActivity
 import com.example.dogedex.doglist.DogListActivity
 import com.example.dogedex.machinelearning.DogRecognition
 import com.example.dogedex.model.Dog
 import com.example.dogedex.model.User
 import com.example.dogedex.settings.SettingsActivity
+import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.support.common.FileUtil
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher =
@@ -116,19 +116,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openDogDetailActivity(dog: Dog) {
-        val intent = Intent(this, DogDetailActivity::class.java)
-        intent.putExtra(DOG_DETAIL, dog)
-        intent.putExtra(IS_RECOGNIZED_KEY, true)
+        val intent = Intent(this, DogDetailComposeActivity::class.java)
+        intent.putExtra(DogDetailComposeActivity.DOG_DETAIL, dog)
+        intent.putExtra(DogDetailComposeActivity.IS_RECOGNIZED_KEY, true)
         startActivity(intent)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        mainViewModel.setupClassifier(
-            FileUtil.loadMappedFile(this@MainActivity, MODEL_PATH),
-            FileUtil.loadLabels(this@MainActivity, LABEL_PATH)
-        )
     }
 
     private fun requestCameraPermission() {

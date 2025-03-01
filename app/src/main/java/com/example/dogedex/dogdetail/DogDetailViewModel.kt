@@ -1,29 +1,36 @@
 package com.example.dogedex.dogdetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.doglist.DogRepository
+import com.example.dogedex.doglist.DogTask
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DogDetailViewModel:ViewModel() {
+@HiltViewModel
+class DogDetailViewModel @Inject constructor(
+    private val dogRepository : DogTask
+):ViewModel() {
 
-    private val _uiState = MutableLiveData<ApiResponseStatus<Any>>()
-    val uiState : LiveData<ApiResponseStatus<Any>>
-        get() = _uiState
+    var uiState = mutableStateOf<ApiResponseStatus<Any>?>(null)
+        private set
 
-    private val dogRepository = DogRepository()
+    //private val dogRepository = DogRepository()
 
     fun addDogToUser(dogId : Long){
         viewModelScope.launch {
-            _uiState.value = ApiResponseStatus.Loading()
+            uiState.value = ApiResponseStatus.Loading()
             handleAddDogToUserResponseStatus(dogRepository.addDogToUser(dogId))
         }
     }
 
     private fun handleAddDogToUserResponseStatus(apiResponseStatus: ApiResponseStatus<Any>) {
-        _uiState.value = apiResponseStatus
+        uiState.value = apiResponseStatus
+    }
+
+    fun resetApiResponse() {
+        uiState.value = null
     }
 }

@@ -19,6 +19,9 @@ tensorLite = "2.5.0"
 tensorSupport = "0.4.0"
 composeBoom = "2024.10.01"
 lifecycleRuntimeKtx = "2.8.7"
+navigationCompose = "2.8.6"
+hiltVersion = "2.55"
+hiltCompose = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,17 +63,25 @@ androidx-compose-testing-unit = {group = "androidx.compose.ui", name = "ui-test-
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-navigation-compose = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose"}
 
 #coil compose
 coil-compose = {module = "io.coil-kt.coil3:coil-compose", version.ref = "coilVer"}
+
+#hilt
+hilt = {module = "com.google.dagger:hilt-android", version.ref = "hiltVersion"}
+hilt-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion"}
+hilt-compose-navigation = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCompose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+kspProject = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+kspApp = {id = "com.google.devtools.ksp"}
 parcelize = {id = "kotlin-parcelize"}
 safeArgs = {id = "androidx.navigation.safeargs"}
-
+hiltApp = {id = "com.google.dagger.hilt.android"}
+hiltProject = {id = "com.google.dagger.hilt.android", version.ref = "hiltVersion"}
 
 

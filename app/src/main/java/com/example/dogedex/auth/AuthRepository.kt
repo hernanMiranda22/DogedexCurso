@@ -2,20 +2,39 @@ package com.example.dogedex.auth
 
 import com.example.dogedex.model.User
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.api.DogsApi.retrofitService
+import com.example.dogedex.api.ApiService
 import com.example.dogedex.api.dto.LoginDTO
 import com.example.dogedex.api.dto.SignUpDTO
 import com.example.dogedex.api.dto.UserDTOMapper
 import com.example.dogedex.api.makeNetworkCall
+import javax.inject.Inject
 
-class AuthRepository {
+interface AuthTasks {
 
     suspend fun login(
         email : String,
         password: String
+    ): ApiResponseStatus<User>
+
+    suspend fun signUp(
+        email : String,
+        password: String,
+        passwordConfirm : String
+    ): ApiResponseStatus<User>
+
+}
+
+
+class AuthRepository @Inject constructor(
+    private val apiService: ApiService
+) : AuthTasks {
+
+    override suspend fun login(
+        email : String,
+        password: String
     ): ApiResponseStatus<User> = makeNetworkCall {
         val loginDTO = LoginDTO(email,password)
-        val loginResponse  = retrofitService.login(loginDTO)
+        val loginResponse  = apiService.login(loginDTO)
 
         if (!loginResponse.isSuccess){
             throw Exception(loginResponse.message)
@@ -27,13 +46,13 @@ class AuthRepository {
 
     }
 
-    suspend fun signUp(
+    override suspend fun signUp(
         email : String,
         password: String,
         passwordConfirm : String
     ): ApiResponseStatus<User> = makeNetworkCall {
         val signUpDTO = SignUpDTO(email,password, passwordConfirm)
-        val signUpResponse  = retrofitService.signUpUser(signUpDTO)
+        val signUpResponse  = apiService.signUpUser(signUpDTO)
 
         if (!signUpResponse.isSuccess){
             throw Exception(signUpResponse.message)

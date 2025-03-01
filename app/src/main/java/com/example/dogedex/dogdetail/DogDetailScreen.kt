@@ -2,59 +2,115 @@ package com.example.dogedex.dogdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import coil3.compose.rememberAsyncImagePainter
 import com.example.dogedex.R
+import com.example.dogedex.api.ApiResponseStatus
+import com.example.dogedex.composables.ErrorDialog
+import com.example.dogedex.composables.LoadingWheel
 import com.example.dogedex.model.Dog
+
+@Preview(showSystemUi = true)
+@Composable
+fun DogDetailPreview(){
+    val dog = Dog(
+        1L, 78, "Pug", "Herding", "70",
+        "75", "", "10 - 12",
+        "Friendly, playful", "5", "6"
+    )
+    DogDetailScreen(dog = dog, onAddDogToUser = {}, onDismissClick = {})
+}
 
 @Preview
 @Composable
-fun DogDetailPreview(){
-    DogDetailScreen()
+fun ErrorDialogPreview(){
+    //ErrorDialog(onDismissClick = {}, dismissStatus = false)
 }
 
 @Composable
-fun DogDetailScreen(){
+fun DogDetailScreen(
+    dog: Dog,
+    apiResponseStatus: ApiResponseStatus<Any>? = null,
+    onAddDogToUser: () -> Unit,
+    onDismissClick : () -> Unit
+)
+{
     Box(modifier = Modifier
+        .fillMaxSize()
         .background(colorResource(R.color.colorSecondary))
         .padding(start = 8.dp, end = 8.dp, bottom = 16.dp),
         contentAlignment = Alignment.TopCenter
     ){
 
-        val dog = Dog(
-            1L, 78, "Pug", "Herding", "70",
-            "75", "", "10 - 12",
-            "Friendly, playful", "5", "6"
-        )
+
         DogInformation(dog)
 
         Image(
-            painter = painterResource(R.drawable.detail_info_background),
-            contentDescription = stringResource(R.string.dogImageContentDescription))
+            painter = rememberAsyncImagePainter(dog.imageUrl),
+            modifier = Modifier
+                .width(270.dp)
+                .padding(top = 80.dp),
+            contentDescription = stringResource(R.string.dogImageContentDescription),
+        )
+
+        FloatingActionButton(
+            onClick = {
+                onAddDogToUser()
+            },
+            modifier = Modifier.align(alignment = Alignment.BottomCenter),
+            shape = CircleShape,
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Check,
+                contentDescription = null
+            )
+        }
+
+        if (apiResponseStatus is ApiResponseStatus.Loading){
+            LoadingWheel()
+        }else if (apiResponseStatus is ApiResponseStatus.Error){
+            ErrorDialog(messageId = apiResponseStatus.messageId, onDismissClick = onDismissClick)
+        }
+
     }
 }
 
@@ -95,6 +151,8 @@ fun DogInformation(dog: Dog) {
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium
                 )
+
+                LifeIcon()
 
                 Text(
                     text = dog.lifeExpectancy,
@@ -182,6 +240,39 @@ fun DogInformation(dog: Dog) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun LifeIcon() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 80.dp, end = 80.dp)
+        ) {
+            Surface(
+                shape = CircleShape,
+                color = colorResource(id = R.color.color_primary)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_hearth_white),
+                    contentDescription = null,
+                    tint = colorResource(android.R.color.white),
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                        .padding(4.dp)
+                )
+            }
+
+            Surface(
+                shape = RoundedCornerShape(bottomEnd = 2.dp, topEnd = 2.dp),
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(6.dp),
+                color = colorResource(R.color.color_primary)
+            ) {  }
     }
 }
 

@@ -1,40 +1,74 @@
 package com.example.dogedex.dogdetail
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.dogedex.dogdetail.ui.theme.DogedexTheme
+import androidx.activity.viewModels
+import com.example.dogedex.R
+import com.example.dogedex.api.ApiResponseStatus
+import com.example.dogedex.model.Dog
+import com.example.dogedex.parcelable
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DogDetailComposeActivity : ComponentActivity() {
+
+    companion object {
+        const val DOG_DETAIL = "dog"
+        const val IS_RECOGNIZED_KEY = "is_recognized"
+    }
+
+    private val dogDetailViewModel: DogDetailViewModel by viewModels()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
+
+        val dog = intent?.extras?.parcelable<Dog>(DOG_DETAIL)
+        val isRecognized = intent?.extras?.getBoolean(IS_RECOGNIZED_KEY, false) ?: false
+
+        if (dog == null) {
+            Toast.makeText(this, R.string.error_showing_dog_not_found, Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+
         setContent {
-            Greeting(
-                name = "Android"
-            )
+
+            val state = dogDetailViewModel.uiState
+
+            if (state.value is ApiResponseStatus.Success){
+                finish()
+            }else{
+                DogDetailScreen(
+                    dog = dog,
+                    apiResponseStatus = state.value,
+                    onAddDogToUser = {
+                        onClickButton(
+                            isRecognized = isRecognized,
+                            dogId = dog.id
+                        )
+                    },
+                    onDismissClick = {onDismissClick()}
+                )
+            }
+
 
         }
     }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(
-        text = "Hello $name!"
-    )
-}
+    private fun onDismissClick(){
+        dogDetailViewModel.resetApiResponse()
+    }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview() {
-    Greeting("Android")
+    private fun onClickButton( dogId: Long,isRecognized: Boolean,) {
+        if (isRecognized) {
+            dogDetailViewModel.addDogToUser(dogId)
+        } else {
+            finish()
+        }
+    }
 }

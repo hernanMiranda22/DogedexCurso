@@ -7,13 +7,22 @@ import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
 import androidx.camera.core.ImageProxy
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import javax.inject.Inject
 
-class ClassifierRepository(private val classifier: Classifier) {
+interface ClassifierTask{
+    suspend fun recognizedImage(imageProxy: ImageProxy) : DogRecognition
+}
 
-    suspend fun recognizedImage(imageProxy: ImageProxy) = withContext(Dispatchers.IO){
+class ClassifierRepository @Inject constructor(
+    private val classifier: Classifier,
+    private val dispatcher: CoroutineDispatcher
+) : ClassifierTask {
+
+    override suspend fun recognizedImage(imageProxy: ImageProxy) = withContext(dispatcher){
         val bitmap = convertImageProxyToBitmap(imageProxy)
         if (bitmap == null) {
             DogRecognition("", 0f)
