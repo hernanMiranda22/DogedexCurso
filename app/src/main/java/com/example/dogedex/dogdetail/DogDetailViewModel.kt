@@ -17,8 +17,6 @@ class DogDetailViewModel @Inject constructor(
     var uiState = mutableStateOf<ApiResponseStatus<Any>?>(null)
         private set
 
-    //private val dogRepository = DogRepository()
-
     fun addDogToUser(dogId : Long){
         viewModelScope.launch {
             uiState.value = ApiResponseStatus.Loading()

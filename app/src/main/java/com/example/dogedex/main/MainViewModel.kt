@@ -6,16 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.doglist.DogRepository
 import com.example.dogedex.doglist.DogTask
-import com.example.dogedex.machinelearning.Classifier
-import com.example.dogedex.machinelearning.ClassifierRepository
 import com.example.dogedex.machinelearning.ClassifierTask
 import com.example.dogedex.machinelearning.DogRecognition
 import com.example.dogedex.model.Dog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.nio.MappedByteBuffer
 import javax.inject.Inject
 
 @HiltViewModel

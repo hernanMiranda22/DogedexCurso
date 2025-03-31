@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,11 +40,11 @@ fun LoginPreview(){
 
 @Composable
 fun LoginScreen(
-    status : ApiResponseStatus.Error<Any>? = null,
-    onRegisterButtonClick:() -> Unit,
-    onLoginButtonClick:(String, String) -> Unit,
-
-    ){
+    status: ApiResponseStatus.Error<Any>? = null,
+    onRegisterButtonClick: () -> Unit,
+    onLoginButtonClick: (String, String) -> Unit,
+    authViewModel: AuthViewModel
+) {
     Scaffold(
         topBar = {
             LoginTopBar()
@@ -51,10 +53,12 @@ fun LoginScreen(
         Box(
             modifier = Modifier
                 .padding(it)
-        ){
+        ) {
             ContentLogin(
                 onLoginButtonClick = onLoginButtonClick,
-                onRegisterButtonClick = onRegisterButtonClick
+                onRegisterButtonClick = onRegisterButtonClick,
+                resetFieldErrors = { authViewModel.resetErrors() },
+                authViewModel = authViewModel
             )
         }
     }
@@ -62,8 +66,10 @@ fun LoginScreen(
 
 @Composable
 private fun ContentLogin(
-    onLoginButtonClick:(String, String) -> Unit,
-    onRegisterButtonClick:() -> Unit,
+    resetFieldErrors: () -> Unit,
+    onLoginButtonClick: (String, String) -> Unit,
+    onRegisterButtonClick: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
 
     val email = remember { mutableStateOf("") }
@@ -81,27 +87,40 @@ private fun ContentLogin(
     ) {
         AuthFields(
             textValue = email.value,
-            onTextChanged = { newValue -> email.value = newValue },
+            onTextChanged = { newValue ->
+                email.value = newValue
+                resetFieldErrors()
+            },
             modifier = Modifier
                 .fillMaxWidth(),
-            labelValue = stringResource(R.string.email)
+            labelValue = stringResource(R.string.email),
+            errorMessageId = authViewModel.emailError.value,
+            errorSemantics = "email-field-error",
+            fieldSemantics = "email-field"
         )
 
         AuthFields(
             textValue = password.value,
-            onTextChanged = { newValue -> password.value = newValue },
+            onTextChanged = { newValue ->
+                password.value = newValue
+                resetFieldErrors()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             labelValue = stringResource(R.string.password),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            errorMessageId = authViewModel.passwordError.value,
+            errorSemantics = "password-field-error",
+            fieldSemantics = "password-field"
         )
-        
+
         Button(
             onClick = { onLoginButtonClick(email.value, password.value) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 16.dp)
+                .semantics { testTag = "login-button" },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.color_primary)
             )
@@ -117,7 +136,8 @@ private fun ContentLogin(
         Button(
             onClick = { onRegisterButtonClick() },
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .semantics { testTag = "login-screen-register-button" },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(android.R.color.white)
             )

@@ -20,7 +20,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.dogedex.CustomTestRunner"
     }
 
     buildTypes {
@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.compose.icon.extends)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.compose.testing.unit)
 
     //Navigation Compose
@@ -101,7 +102,13 @@ dependencies {
     implementation(libs.hilt.compose.navigation)
     ksp(libs.hilt.compiler)
 
+    testImplementation(libs.coroutine.test)
+
     testImplementation(libs.junit)
+    testImplementation(libs.mock.test)
+    testImplementation(libs.arc.core)
+
+    androidTestImplementation(libs.hilt.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.boom))

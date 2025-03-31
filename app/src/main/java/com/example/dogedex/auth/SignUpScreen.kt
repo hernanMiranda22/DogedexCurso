@@ -26,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,8 +44,8 @@ fun PreviewSignUp() {
 fun SignUpScreen(
     onNavigationIconClick: () -> Unit,
     onSignUpButtonClick: (String, String, String) -> Unit,
-
-    ) {
+    authViewModel: AuthViewModel
+) {
     Scaffold(
         topBar = {
             SignUpTopBar(
@@ -55,7 +57,9 @@ fun SignUpScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             ContentSignUp(
-                onSignUpButtonClick = onSignUpButtonClick
+                resetFieldErrors = {authViewModel.resetErrors()},
+                onSignUpButtonClick = onSignUpButtonClick,
+                authViewModel = authViewModel
             )
         }
     }
@@ -63,7 +67,9 @@ fun SignUpScreen(
 
 @Composable
 private fun ContentSignUp(
-    onSignUpButtonClick: (String, String, String) -> Unit
+    resetFieldErrors : () -> Unit,
+    onSignUpButtonClick: (String, String, String) -> Unit,
+    authViewModel: AuthViewModel
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -83,38 +89,51 @@ private fun ContentSignUp(
     ) {
         AuthFields(
             textValue = email,
-            onTextChanged = { email = it },
+            onTextChanged = {
+                email = it
+                resetFieldErrors()
+            },
             modifier = Modifier
                 .fillMaxWidth(),
-            labelValue = stringResource(R.string.email)
+            labelValue = stringResource(R.string.email),
+            errorMessageId = authViewModel.emailError.value
         )
 
 
         AuthFields(
             textValue = password,
-            onTextChanged = { password = it },
+            onTextChanged = {
+                password = it
+                resetFieldErrors()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             labelValue = stringResource(R.string.password),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            errorMessageId = authViewModel.passwordError.value
         )
 
         AuthFields(
             textValue = confirmPassword,
-            onTextChanged = { confirmPassword = it },
+            onTextChanged = {
+                confirmPassword = it
+                resetFieldErrors()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             labelValue = stringResource(R.string.confirm_password),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            errorMessageId = authViewModel.confirmPasswordError.value
         )
 
         Button(
             onClick = {onSignUpButtonClick(email,password,confirmPassword)},
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 16.dp)
+                .semantics { testTag = "signUp-button" },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.color_primary)
             )

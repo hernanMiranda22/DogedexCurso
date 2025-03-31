@@ -23,7 +23,6 @@ class DogListViewModel @Inject constructor(
     var uiState = mutableStateOf<ApiResponseStatus<Any>?>(null)
         private set
 
-    //private val dogRepository = DogRepository()
 
     init {
         getDogCollection()

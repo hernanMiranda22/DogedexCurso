@@ -23,41 +23,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity(){
 
-    private val authViewModel : AuthViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
 
-            val user = authViewModel.user
-            val userValue = user.value
-            if (userValue != null){
-                User.setLoggedInUser(this, userValue)
-                startMainActivity()
-            }
-
             DogedexTheme {
-                val status = authViewModel.uiState
                 AuthScreen(
-                    onLoginButtonClick = { email, password ->
-                        authViewModel.login(email, password)
-                    },
-                    onSignUpButtonClick = { email, password, passwordConfirm ->
-                        authViewModel.signUp(email, password, passwordConfirm)
-                    },
-                    onErrorDialogDismiss = ::onErrorDialogDismiss,
-                    status = status.value
+                    onUserLoggedIn = ::startMainActivity,
                 )
             }
         }
     }
 
-    private fun onErrorDialogDismiss(){
-        authViewModel.resetApiResponse()
-    }
-
-    private fun startMainActivity() {
+    private fun startMainActivity(user : User) {
+        User.setLoggedInUser(this, user)
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

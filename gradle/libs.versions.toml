@@ -22,6 +22,10 @@ lifecycleRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.6"
 hiltVersion = "2.55"
 hiltCompose = "1.2.0"
+coroutineTest = "1.10.1"
+mockVersion = "1.13.7"
+arcVersion = "2.2.0"
+rules = "1.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +76,18 @@ coil-compose = {module = "io.coil-kt.coil3:coil-compose", version.ref = "coilVer
 hilt = {module = "com.google.dagger:hilt-android", version.ref = "hiltVersion"}
 hilt-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion"}
 hilt-compose-navigation = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCompose"}
+hilt-test = {module = "com.google.dagger:hilt-android-testing", version.ref = "hiltVersion"}
+
+
+#coroutine test
+coroutine-test = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineTest"}
+
+#mock
+mock-test = {module = "io.mockk:mockk", version.ref= "mockVersion"}
+
+#core-testing
+arc-core = {group = "androidx.arch.core", name = "core-testing", version.ref = "arcVersion"}
+androidx-rules = { group = "androidx.test", name = "rules", version.ref = "rules" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
