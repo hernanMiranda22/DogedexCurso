@@ -32,6 +32,7 @@ import com.example.dogedex.machinelearning.DogRecognition
 import com.example.dogedex.model.Dog
 import com.example.dogedex.model.User
 import com.example.dogedex.settings.SettingsActivity
+import com.example.dogedex.testutils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.support.common.FileUtil
 import java.util.concurrent.ExecutorService
@@ -203,6 +204,8 @@ class MainActivity : AppCompatActivity() {
         val cameraProviderFuture =
             ProcessCameraProvider.getInstance(this)
 
+        EspressoIdlingResource.increment()
+
         cameraProviderFuture.addListener({
             //Used to bind the lifecyle of cameras to the lifecycle owner
             val cameraProvider = cameraProviderFuture.get()
@@ -218,6 +221,7 @@ class MainActivity : AppCompatActivity() {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
             imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                EspressoIdlingResource.decrement()
                 mainViewModel.recognizedImage(imageProxy)
             }
 

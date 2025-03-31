@@ -102,6 +102,9 @@ dependencies {
     implementation(libs.hilt.compose.navigation)
     ksp(libs.hilt.compiler)
 
+    //espresso idlin
+    implementation(libs.android.espresso.idlin)
+
     testImplementation(libs.coroutine.test)
 
     testImplementation(libs.junit)

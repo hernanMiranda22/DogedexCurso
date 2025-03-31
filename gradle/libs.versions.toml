@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.2"
+agp = "8.9.1"
 kotlin = "2.0.0"
 ksp="2.0.0-1.0.22"
 coreKtx = "1.15.0"
@@ -88,6 +88,9 @@ mock-test = {module = "io.mockk:mockk", version.ref= "mockVersion"}
 #core-testing
 arc-core = {group = "androidx.arch.core", name = "core-testing", version.ref = "arcVersion"}
 androidx-rules = { group = "androidx.test", name = "rules", version.ref = "rules" }
+#espressoIdlin
+android-espresso-idlin = {group = "androidx.test.espresso", name = "espresso-idling-resource", version.ref = "espressoCore"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
