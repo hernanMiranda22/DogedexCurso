@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 interface ClassifierTask{
-    suspend fun recognizedImage(imageProxy: ImageProxy) : DogRecognition
+    suspend fun recognizedImage(imageProxy: ImageProxy) : List<DogRecognition>
 }
 
 class ClassifierRepository @Inject constructor(
@@ -25,9 +25,9 @@ class ClassifierRepository @Inject constructor(
     override suspend fun recognizedImage(imageProxy: ImageProxy) = withContext(dispatcher){
         val bitmap = convertImageProxyToBitmap(imageProxy)
         if (bitmap == null) {
-            DogRecognition("", 0f)
+            listOf(DogRecognition("", 0f))
         }else{
-            classifier.recognizeImage(bitmap).first()
+            classifier.recognizeImage(bitmap).subList(0,5)
         }
     }
 

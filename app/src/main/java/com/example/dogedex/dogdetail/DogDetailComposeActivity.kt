@@ -16,59 +16,19 @@ class DogDetailComposeActivity : ComponentActivity() {
 
     companion object {
         const val DOG_DETAIL = "dog"
+        const val MOST_PROBABLE_DOGS_IDS = "most_probable_dogs_ids"
         const val IS_RECOGNIZED_KEY = "is_recognized"
     }
-
-    private val dogDetailViewModel: DogDetailViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
-
-        val dog = intent?.extras?.parcelable<Dog>(DOG_DETAIL)
-        val isRecognized = intent?.extras?.getBoolean(IS_RECOGNIZED_KEY, false) ?: false
-
-        if (dog == null) {
-            Toast.makeText(this, R.string.error_showing_dog_not_found, Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-
         setContent {
 
-            val state = dogDetailViewModel.uiState
-
-            if (state.value is ApiResponseStatus.Success){
-                finish()
-            }else{
-                DogDetailScreen(
-                    dog = dog,
-                    apiResponseStatus = state.value,
-                    onAddDogToUser = {
-                        onClickButton(
-                            isRecognized = isRecognized,
-                            dogId = dog.id
-                        )
-                    },
-                    onDismissClick = {onDismissClick()}
-                )
-            }
-
-
+            DogDetailScreen(
+                finishActivity = { finish() }
+            )
         }
     }
 
-    private fun onDismissClick(){
-        dogDetailViewModel.resetApiResponse()
-    }
-
-    private fun onClickButton( dogId: Long,isRecognized: Boolean,) {
-        if (isRecognized) {
-            dogDetailViewModel.addDogToUser(dogId)
-        } else {
-            finish()
-        }
-    }
 }

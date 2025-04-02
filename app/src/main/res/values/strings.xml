@@ -35,4 +35,7 @@
     <string name="title_activity_dog_detail_compose">DogDetailComposeActivity</string>
     <string name="oops_something_happened">Oops, something happened!</string>
     <string name="my_dog_collection">My dog collection</string>
+    <string name="dismiss">My dog is not here</string>
+    <string name="other_probable_dogs">Other probable dogs</string>
+    <string name="not_your_dog_button">"Is not your dog? Tap to see other probable dogs "</string>
 </resources>

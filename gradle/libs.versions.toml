@@ -61,6 +61,7 @@ androidx-compose-ui-preview = {group = "androidx.compose.ui", name = "ui-tooling
 androidx-compose-ui-tooling = {group = "androidx.compose.ui", name = "ui-tooling"}
 androidx-compose-viewmodel = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle"}
 androidx-compose-activity = {group = "androidx.activity", name = "activity-compose" , version.ref = "activity"}
+androidx-compose-runtime = {group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx"}
 androidx-compose-icon-core = {group = "androidx.compose.material", name = "material-icons-core"}
 androidx-compose-icon-extends = {group = "androidx.compose.material", name = "material-icons-extended"}
 androidx-compose-testing-unit = {group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "junitVersion"}

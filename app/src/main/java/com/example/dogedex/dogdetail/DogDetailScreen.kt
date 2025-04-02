@@ -2,7 +2,6 @@ package com.example.dogedex.dogdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,10 +22,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,8 +37,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.rememberAsyncImagePainter
 import com.example.dogedex.R
 import com.example.dogedex.api.ApiResponseStatus
@@ -54,26 +49,24 @@ import com.example.dogedex.model.Dog
 @Preview(showSystemUi = true)
 @Composable
 fun DogDetailPreview(){
-    val dog = Dog(
-        1L, 78, "Pug", "Herding", "70",
-        "75", "", "10 - 12",
-        "Friendly, playful", "5", "6"
-    )
-    DogDetailScreen(dog = dog, onAddDogToUser = {}, onDismissClick = {})
+//    val dog = Dog(
+//        1L, 78, "Pug", "Herding", "70",
+//        "75", "", "10 - 12",
+//        "Friendly, playful", "5", "6"
+//    )
+    DogDetailScreen(finishActivity =  { })
 }
 
 @Preview
 @Composable
 fun ErrorDialogPreview(){
-    //ErrorDialog(onDismissClick = {}, dismissStatus = false)
+    MostProbableDogsDialog(mostProbableDogs = getFakeDogs(), onShowMostProbableDogsDialogDismiss = {}, onItemClicked = {})
 }
 
 @Composable
 fun DogDetailScreen(
-    dog: Dog,
-    apiResponseStatus: ApiResponseStatus<Any>? = null,
-    onAddDogToUser: () -> Unit,
-    onDismissClick : () -> Unit
+    finishActivity : () -> Unit,
+    dogDetailViewModel: DogDetailViewModel = hiltViewModel()
 )
 {
     Box(modifier = Modifier
@@ -83,8 +76,18 @@ fun DogDetailScreen(
         contentAlignment = Alignment.TopCenter
     ){
 
+        val probableDogsDialogEnable = remember { mutableStateOf(false) }
+        val state = dogDetailViewModel.uiState.value
+        val dog = dogDetailViewModel.dog.value
+        val isRecognized = dogDetailViewModel.isRecognition.value
 
-        DogInformation(dog)
+        if (state is ApiResponseStatus.Success) {
+            finishActivity()
+        }
+        DogInformation(dog, isRecognized){
+            dogDetailViewModel.getProbableDogs()
+            probableDogsDialogEnable.value = true
+        }
 
         Image(
             painter = rememberAsyncImagePainter(dog.imageUrl),
@@ -96,7 +99,11 @@ fun DogDetailScreen(
 
         FloatingActionButton(
             onClick = {
-                onAddDogToUser()
+                if (isRecognized) {
+                    dogDetailViewModel.addDogToUser()
+                } else {
+                    finishActivity()
+                }
             },
             modifier = Modifier
                 .align(alignment = Alignment.BottomCenter)
@@ -110,17 +117,33 @@ fun DogDetailScreen(
             )
         }
 
-        if (apiResponseStatus is ApiResponseStatus.Loading){
+        if (state is ApiResponseStatus.Loading){
             LoadingWheel()
-        }else if (apiResponseStatus is ApiResponseStatus.Error){
-            ErrorDialog(messageId = apiResponseStatus.messageId, onDismissClick = onDismissClick)
+        }else if (state is ApiResponseStatus.Error){
+            ErrorDialog(messageId = state.messageId, onDismissClick =  {dogDetailViewModel.resetApiResponse()})
+        }
+
+        val probableDogList = dogDetailViewModel.probableDogList.collectAsStateWithLifecycle().value
+
+        if (probableDogsDialogEnable.value){
+            MostProbableDogsDialog(
+                mostProbableDogs =  probableDogList,
+                onShowMostProbableDogsDialogDismiss = {probableDogsDialogEnable.value = false},
+                onItemClicked = {
+                    dogDetailViewModel.updateDog(it)
+                }
+            )
         }
 
     }
 }
 
 @Composable
-fun DogInformation(dog: Dog) {
+fun DogInformation(
+    dog: Dog,
+    isRecognized: Boolean,
+    onProbableDogsButtonClick: () -> Unit
+) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 180.dp)
@@ -177,6 +200,19 @@ fun DogInformation(dog: Dog) {
                     color = colorResource(R.color.text_black),
                     textAlign = TextAlign.Center
                 )
+
+                if (isRecognized) {
+                    Button(
+                        modifier = Modifier.padding(16.dp),
+                        onClick = { onProbableDogsButtonClick() },
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.not_your_dog_button),
+                            textAlign = TextAlign.Center,
+                            fontSize = 18.sp,
+                        )
+                    }
+                }
                 
                 HorizontalDivider(
                     thickness = 1.dp,

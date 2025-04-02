@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.rules)
+    implementation(libs.androidx.compose.runtime)
     androidTestImplementation(libs.androidx.compose.testing.unit)
 
     //Navigation Compose
