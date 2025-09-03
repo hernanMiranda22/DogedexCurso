@@ -6,10 +6,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.auth.AuthScreen
-import com.example.dogedex.auth.AuthTasks
-import com.example.dogedex.auth.AuthViewModel
-import com.example.dogedex.model.User
+import com.example.dogedex.core.auth.AuthScreen
+import com.example.dogedex.core.auth.AuthTasks
+import com.example.dogedex.core.auth.AuthViewModel
+import com.example.dogedex.core.model.User
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -23,8 +23,8 @@ class AuthScreenTest {
     @Test
     fun whenTapRegisterButtonOpenSignUpScreen() = runTest {
 
-        class FakeAuthRepository : AuthTasks{
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeAuthRepository : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
 
@@ -32,7 +32,7 @@ class AuthScreenTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
         }
@@ -56,8 +56,8 @@ class AuthScreenTest {
     @Test
     fun whenTapLoginButtonAndEmailFieldIsEmptyShowErrorMessage() = runTest {
 
-        class FakeAuthRepository : AuthTasks{
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeAuthRepository : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
 
@@ -65,7 +65,7 @@ class AuthScreenTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
         }

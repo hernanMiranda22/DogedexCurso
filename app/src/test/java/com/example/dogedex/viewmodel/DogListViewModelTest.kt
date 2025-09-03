@@ -1,9 +1,9 @@
 package com.example.dogedex.viewmodel
 
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.doglist.DogListViewModel
-import com.example.dogedex.doglist.DogTask
-import com.example.dogedex.model.Dog
+import com.example.dogedex.core.doglist.DogListViewModel
+import com.example.dogedex.core.doglist.DogTask
+import com.example.dogedex.core.model.Dog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
@@ -33,16 +33,16 @@ class DogListViewModelTest {
     fun `when repository return dogList apiResponse is success`() = runTest {
 
         class FakeRepository : DogTask {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+            override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
 
                 return ApiResponseStatus.Success(
                     listOf(
-                        Dog(
+                        com.example.dogedex.core.model.Dog(
                             1, 1, "", "", "", "",
                             "", "", "", "", "",
                             inCollection = false
                         ),
-                        Dog(
+                        com.example.dogedex.core.model.Dog(
                             2, 2, "", "", "", "",
                             "", "", "", "", "",
                             inCollection = false
@@ -55,9 +55,9 @@ class DogListViewModelTest {
                 return ApiResponseStatus.Success(Unit)
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
                 return ApiResponseStatus.Success(
-                    Dog(
+                    com.example.dogedex.core.model.Dog(
                         1, 1, "", "", "", "",
                         "", "", "", "", "",
                         inCollection = false
@@ -77,7 +77,7 @@ class DogListViewModelTest {
     fun `when repository return error apiResponse is error`() = runTest {
 
         class FakeRepository : DogTask {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+            override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
 
                 return ApiResponseStatus.Error(messageId = 12)
             }
@@ -86,7 +86,7 @@ class DogListViewModelTest {
                 return ApiResponseStatus.Error(messageId = 12)
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
                 return ApiResponseStatus.Error(messageId = 12)
             }
 
@@ -102,7 +102,7 @@ class DogListViewModelTest {
     fun `when repository return state apiResponse is reset`() = runTest {
 
         class FakeRepository : DogTask {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+            override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
 
                 return ApiResponseStatus.Error(messageId = 12)
             }
@@ -111,7 +111,7 @@ class DogListViewModelTest {
                 return ApiResponseStatus.Error(messageId = 12)
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
                 return ApiResponseStatus.Error(messageId = 12)
             }
 

@@ -10,21 +10,19 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.base.IdlingResourceRegistry
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.di.ClassifierModule
-import com.example.dogedex.di.DogTaskModule
-import com.example.dogedex.doglist.DogTask
-import com.example.dogedex.machinelearning.ClassifierTask
-import com.example.dogedex.machinelearning.DogRecognition
-import com.example.dogedex.main.MainActivity
-import com.example.dogedex.model.Dog
-import com.example.dogedex.testutils.EspressoIdlingResource
+import com.example.dogedex.camera.di.ClassifierModule
+import com.example.dogedex.core.di.DogTaskModule
+import com.example.dogedex.core.doglist.DogTask
+import com.example.dogedex.camera.machinelearning.ClassifierTask
+import com.example.dogedex.camera.machinelearning.DogRecognition
+import com.example.dogedex.camera.main.MainActivity
+import com.example.dogedex.core.testutils.EspressoIdlingResource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,7 +37,7 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
-@UninstallModules(DogTaskModule::class, ClassifierModule::class)
+@UninstallModules(DogTaskModule::class, com.example.dogedex.camera.di.ClassifierModule::class)
 @HiltAndroidTest
 class MainActivityTest {
 
@@ -55,7 +53,7 @@ class MainActivityTest {
     val composeRule = createComposeRule()
 
     @get:Rule(order = 3)
-    val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityScenarioRule = ActivityScenarioRule(com.example.dogedex.camera.main.MainActivity::class.java)
 
 
     @Before
@@ -69,16 +67,16 @@ class MainActivityTest {
 
     }
 
-    class FakeDogRepository @Inject constructor() : DogTask{
-        override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+    class FakeDogRepository @Inject constructor() : DogTask {
+        override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
             return ApiResponseStatus.Success(
                 listOf(
-                    Dog(
+                    com.example.dogedex.core.model.Dog(
                         1, 1, "", "", "", "",
                         "", "", "", "", "",
                         inCollection = true
                     ),
-                    Dog(
+                    com.example.dogedex.core.model.Dog(
                         2, 2, "", "", "", "",
                         "", "", "", "", "",
                         inCollection = true
@@ -91,9 +89,9 @@ class MainActivityTest {
             TODO("Not yet implemented")
         }
 
-        override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+        override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
             return ApiResponseStatus.Success(
-                Dog(
+                com.example.dogedex.core.model.Dog(
                     89, 20, "Chihuahua", "", "", "",
                     "", "", "", "", "",
                     inCollection = true
@@ -102,9 +100,10 @@ class MainActivityTest {
         }
     }
 
-    class FakeClassifierRepository @Inject constructor() : ClassifierTask{
-        override suspend fun recognizedImage(imageProxy: ImageProxy): DogRecognition {
-            return DogRecognition("gfdgfdgdf", 100.0f)
+    class FakeClassifierRepository @Inject constructor() :
+        com.example.dogedex.camera.machinelearning.ClassifierTask {
+        override suspend fun recognizedImage(imageProxy: ImageProxy): com.example.dogedex.camera.machinelearning.DogRecognition {
+            return com.example.dogedex.camera.machinelearning.DogRecognition("gfdgfdgdf", 100.0f)
         }
     }
 
@@ -125,7 +124,7 @@ class MainActivityTest {
         @Binds
         abstract fun bindClassifierTask(
             fakeClassifierRepository: FakeClassifierRepository
-        ) : ClassifierTask
+        ) : com.example.dogedex.camera.machinelearning.ClassifierTask
     }
 
 

@@ -3,11 +3,11 @@ package com.example.dogedex.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.camera.core.ImageProxy
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.doglist.DogRepository
-import com.example.dogedex.machinelearning.ClassifierRepository
-import com.example.dogedex.machinelearning.DogRecognition
-import com.example.dogedex.main.MainViewModel
-import com.example.dogedex.model.Dog
+import com.example.dogedex.core.doglist.DogRepository
+import com.example.dogedex.camera.machinelearning.ClassifierRepository
+import com.example.dogedex.camera.machinelearning.DogRecognition
+import com.example.dogedex.camera.main.MainViewModel
+import com.example.dogedex.core.model.Dog
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -29,12 +29,12 @@ class MainViewModelTest {
     @RelaxedMockK
     private lateinit var dogRepository: DogRepository
     @RelaxedMockK
-    private lateinit var classifierRepository : ClassifierRepository
+    private lateinit var classifierRepository : com.example.dogedex.camera.machinelearning.ClassifierRepository
     @RelaxedMockK
     private lateinit var imageProxy: ImageProxy
 
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: com.example.dogedex.camera.main.MainViewModel
 
 
 
@@ -50,7 +50,8 @@ class MainViewModelTest {
     @Before
     fun setup(){
         MockKAnnotations.init(this)
-        viewModel = MainViewModel(dogRepository, classifierRepository)
+        viewModel =
+            com.example.dogedex.camera.main.MainViewModel(dogRepository, classifierRepository)
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
@@ -63,7 +64,7 @@ class MainViewModelTest {
     @Test
     fun `when the user take a photo send machine learning id and api status is success`() = runTest {
 
-        val fakeDog = Dog(
+        val fakeDog = com.example.dogedex.core.model.Dog(
             idDog, index, "", "", "", "",
             "", "", "", "", "",
             inCollection = false
@@ -80,7 +81,8 @@ class MainViewModelTest {
     @Test
     fun `when the user is using the camera and recognize the dog repository return dogRecognition`() = runTest {
 
-        val fakeDogRecognition = DogRecognition(idMlDog, confidence)
+        val fakeDogRecognition =
+            com.example.dogedex.camera.machinelearning.DogRecognition(idMlDog, confidence)
 
         coEvery { classifierRepository.recognizedImage(imageProxy) } returns fakeDogRecognition
 

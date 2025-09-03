@@ -11,10 +11,9 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.auth.AuthTasks
-import com.example.dogedex.auth.LoginActivity
-import com.example.dogedex.di.AuthTaskModule
-import com.example.dogedex.model.User
+import com.example.dogedex.core.auth.AuthTasks
+import com.example.dogedex.core.auth.LoginActivity
+import com.example.dogedex.core.di.AuthTaskModule
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -38,10 +37,10 @@ class LoginActivityTest {
     val composeRule = createAndroidComposeRule<LoginActivity>()
 
 
-    class FakeAuthRepository @Inject constructor() : AuthTasks{
-        override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+    class FakeAuthRepository @Inject constructor() : AuthTasks {
+        override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
             return ApiResponseStatus.Success(
-                User(1L, "prueba2025@gmail.com", "gfdgdfgbdfhjgd")
+                com.example.dogedex.core.model.User(1L, "prueba2025@gmail.com", "gfdgdfgbdfhjgd")
             )
         }
 
@@ -49,7 +48,7 @@ class LoginActivityTest {
             email: String,
             password: String,
             passwordConfirm: String
-        ): ApiResponseStatus<User> {
+        ): ApiResponseStatus<com.example.dogedex.core.model.User> {
             TODO("Not yet implemented")
         }
     }

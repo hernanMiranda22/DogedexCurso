@@ -12,7 +12,7 @@ import com.example.dogedex.api.responses.DefaultResponse
 import com.example.dogedex.api.responses.DogApiResponse
 import com.example.dogedex.api.responses.DogListApiResponse
 import com.example.dogedex.api.responses.UserResponse
-import com.example.dogedex.auth.AuthRepository
+import com.example.dogedex.core.auth.AuthRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.Assert.*

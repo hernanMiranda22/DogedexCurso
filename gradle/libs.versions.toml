@@ -103,5 +103,6 @@ parcelize = {id = "kotlin-parcelize"}
 safeArgs = {id = "androidx.navigation.safeargs"}
 hiltApp = {id = "com.google.dagger.hilt.android"}
 hiltProject = {id = "com.google.dagger.hilt.android", version.ref = "hiltVersion"}
+android-library = { id = "com.android.library", version.ref = "agp" }
 
 

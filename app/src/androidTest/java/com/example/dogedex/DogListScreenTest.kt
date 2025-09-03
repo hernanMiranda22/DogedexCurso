@@ -4,10 +4,11 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.doglist.DogListScreen
-import com.example.dogedex.doglist.DogListViewModel
-import com.example.dogedex.doglist.DogTask
-import com.example.dogedex.model.Dog
+import com.example.dogedex.core.api.ApiResponseStatus
+import com.example.dogedex.core.doglist.DogListScreen
+import com.example.dogedex.core.doglist.DogListViewModel
+import com.example.dogedex.core.doglist.DogTask
+import com.example.dogedex.core.model.Dog
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -22,8 +23,8 @@ class DogListScreenTest {
     @Test
     fun whenRepositoryReturnApiStatusLoadingUiShowLoadingWheel() = runTest {
 
-        class FakeDogRepository : DogTask{
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+        class FakeDogRepository : DogTask {
+            override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
                 return ApiResponseStatus.Loading()
             }
 
@@ -31,7 +32,7 @@ class DogListScreenTest {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
                 TODO("Not yet implemented")
             }
         }
@@ -54,8 +55,8 @@ class DogListScreenTest {
     @Test
     fun whenRepositoryReturnApiStatusErrorShowAlertDialogMessage() = runTest {
 
-        class FakeDogRepository : DogTask{
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+        class FakeDogRepository : DogTask {
+            override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
                 return ApiResponseStatus.Error(messageId = R.string.there_was_an_error)
             }
 
@@ -63,7 +64,7 @@ class DogListScreenTest {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
                 TODO("Not yet implemented")
             }
         }
@@ -93,16 +94,16 @@ class DogListScreenTest {
         val dog2Name = "Juan"
 
 
-        class FakeDogRepository : DogTask{
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+        class FakeDogRepository : DogTask {
+            override suspend fun getDogCollection(): ApiResponseStatus<List<com.example.dogedex.core.model.Dog>> {
                 return ApiResponseStatus.Success(
                     listOf(
-                        Dog(
+                        com.example.dogedex.core.model.Dog(
                             1, 1, dog1Name, "", "", "",
                             "", "", "", "", "",
                             inCollection = true
                         ),
-                        Dog(
+                        com.example.dogedex.core.model.Dog(
                             2, 2, dog2Name, "", "", "",
                             "", "", "", "", "",
                             inCollection = true
@@ -115,7 +116,7 @@ class DogListScreenTest {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<com.example.dogedex.core.model.Dog> {
                 TODO("Not yet implemented")
             }
         }

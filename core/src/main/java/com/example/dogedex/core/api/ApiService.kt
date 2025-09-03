@@ -1,0 +1,42 @@
+package com.example.dogedex.core.api
+
+import com.example.dogedex.core.ADD_DOG_TO_USER_URL
+import com.example.dogedex.core.GET_ALL_DOGS
+import com.example.dogedex.core.GET_DOG_BY_ML_ID
+import com.example.dogedex.core.GET_USER_DOGS_URL
+import com.example.dogedex.core.SIGN_IN_URL
+import com.example.dogedex.core.SIGN_UP_URL
+import com.example.dogedex.core.api.dto.AddDogToUserDTO
+import com.example.dogedex.core.api.dto.LoginDTO
+import com.example.dogedex.core.api.dto.SignUpDTO
+import com.example.dogedex.core.api.responses.DogListApiResponse
+import com.example.dogedex.core.api.responses.AuthApiResponse
+import com.example.dogedex.core.api.responses.DefaultResponse
+import com.example.dogedex.core.api.responses.DogApiResponse
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Headers
+import retrofit2.http.Body
+import retrofit2.http.Query
+
+interface ApiService {
+    @GET(GET_ALL_DOGS)
+    suspend fun getAllDogs() : DogListApiResponse
+
+    @POST(SIGN_UP_URL)
+    suspend fun signUpUser(@Body signUpDTO: SignUpDTO) : AuthApiResponse
+
+    @POST(SIGN_IN_URL)
+    suspend fun login(@Body loginDTO: LoginDTO) : AuthApiResponse
+
+    @Headers("${ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY}: true")
+    @POST(ADD_DOG_TO_USER_URL)
+    suspend fun addDogToUser(@Body addDogToUserDTO: AddDogToUserDTO): DefaultResponse
+
+    @Headers("${ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY}: true")
+    @GET(GET_USER_DOGS_URL)
+    suspend fun getUserDogs(): DogListApiResponse
+
+    @GET(GET_DOG_BY_ML_ID)
+    suspend fun getDogByMlId(@Query("ml_id") mlId : String) : DogApiResponse
+}

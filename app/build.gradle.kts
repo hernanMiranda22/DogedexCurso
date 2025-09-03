@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+    implementation(project(":core"))
+    implementation(project(":camera"))
+
     implementation(libs.androidx.lifecycle)
 
     //retrofit y moshi

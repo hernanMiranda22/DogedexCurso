@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Dogedex"
 include(":app")
- 
+include(":core")
+include(":camera")

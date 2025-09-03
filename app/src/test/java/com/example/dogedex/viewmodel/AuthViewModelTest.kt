@@ -1,9 +1,9 @@
 package com.example.dogedex.viewmodel
 
 import com.example.dogedex.api.ApiResponseStatus
-import com.example.dogedex.auth.AuthTasks
-import com.example.dogedex.auth.AuthViewModel
-import com.example.dogedex.model.User
+import com.example.dogedex.core.auth.AuthTasks
+import com.example.dogedex.core.auth.AuthViewModel
+import com.example.dogedex.core.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
@@ -38,10 +38,10 @@ class AuthViewModelTest {
     @Test
     fun `when auth repository, login is complete and apiResponse return success`() = runTest {
 
-        val fakeUser = User(1L, "Gfdgdfgfd@gmail.com" , "")
+        val fakeUser = com.example.dogedex.core.model.User(1L, "Gfdgdfgfd@gmail.com", "")
 
-        class FakeRepositoryAuth :AuthTasks {
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeRepositoryAuth : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Success(
                     fakeUser
                 )
@@ -51,7 +51,7 @@ class AuthViewModelTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Success(
                     fakeUser
                 )
@@ -72,8 +72,8 @@ class AuthViewModelTest {
     @Test
     fun `when auth repository, login is complete and apiResponse return error`() = runTest {
 
-        class FakeRepositoryAuth :AuthTasks {
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeRepositoryAuth : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Error(20)
             }
 
@@ -81,7 +81,7 @@ class AuthViewModelTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Error(20)
             }
         }
@@ -99,8 +99,8 @@ class AuthViewModelTest {
     @Test
     fun `when auth repository return state apiResponse is reset`() = runTest {
 
-        class FakeRepositoryAuth :AuthTasks {
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeRepositoryAuth : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Error(20)
             }
 
@@ -108,7 +108,7 @@ class AuthViewModelTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Error(20)
             }
         }
@@ -124,10 +124,10 @@ class AuthViewModelTest {
 
     @Test
     fun `when sign up is correct api status is success`() = runTest {
-        val fakeUser = User(1L, "Gfdgdfgfd@gmail.com" , "hghghghghg")
+        val fakeUser = com.example.dogedex.core.model.User(1L, "Gfdgdfgfd@gmail.com", "hghghghghg")
 
-        class FakeRepositoryAuth :AuthTasks {
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeRepositoryAuth : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Success(
                     fakeUser
                 )
@@ -137,7 +137,7 @@ class AuthViewModelTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Success(
                     fakeUser
                 )
@@ -154,10 +154,10 @@ class AuthViewModelTest {
 
     @Test
     fun `when passwords is not identical api status is error`() = runTest {
-        val fakeUser = User(1L, "Gfdgdfgfd@gmail.com" , "hghghghghg")
+        val fakeUser = com.example.dogedex.core.model.User(1L, "Gfdgdfgfd@gmail.com", "hghghghghg")
 
-        class FakeRepositoryAuth :AuthTasks {
-            override suspend fun login(email: String, password: String): ApiResponseStatus<User> {
+        class FakeRepositoryAuth : AuthTasks {
+            override suspend fun login(email: String, password: String): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Success(
                     fakeUser
                 )
@@ -167,7 +167,7 @@ class AuthViewModelTest {
                 email: String,
                 password: String,
                 passwordConfirm: String
-            ): ApiResponseStatus<User> {
+            ): ApiResponseStatus<com.example.dogedex.core.model.User> {
                 return ApiResponseStatus.Error(25)
             }
         }

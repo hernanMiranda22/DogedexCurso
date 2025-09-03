@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="you_need_to_accept_camera_permission">You need to accept camera permission</string>
+    <string name="aceptame_por_favor">Aceptame por favor</string>
+    <string name="aceptame">Aceptame</string>
+    <string name="todo">TODO</string>
+</resources>

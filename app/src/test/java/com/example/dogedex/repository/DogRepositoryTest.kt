@@ -4,7 +4,7 @@ import com.example.dogedex.R
 import com.example.dogedex.api.ApiResponseStatus
 import com.example.dogedex.api.ApiService
 import com.example.dogedex.api.dto.AddDogToUserDTO
-import com.example.dogedex.api.dto.DogDTO
+import com.example.dogedex.core.api.dto.DogDTO
 import com.example.dogedex.api.dto.LoginDTO
 import com.example.dogedex.api.dto.SignUpDTO
 import com.example.dogedex.api.responses.AuthApiResponse
@@ -13,7 +13,7 @@ import com.example.dogedex.api.responses.DogApiResponse
 import com.example.dogedex.api.responses.DogListApiResponse
 import com.example.dogedex.api.responses.DogListResponse
 import com.example.dogedex.api.responses.DogResponse
-import com.example.dogedex.doglist.DogRepository
+import com.example.dogedex.core.doglist.DogRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,11 +35,11 @@ class DogRepositoryTest {
                     isSuccess = true,
                     data = DogListResponse(
                         listOf(
-                            DogDTO(
+                            com.example.dogedex.core.api.dto.DogDTO(
                                 1, 1, "", "", "", "",
                                 "", "", "", "", ""
                             ),
-                            DogDTO(
+                            com.example.dogedex.core.api.dto.DogDTO(
                                 2, 2, "", "", "", "",
                                 "", "", "", "", ""
                             )
@@ -66,7 +66,7 @@ class DogRepositoryTest {
                     isSuccess = true,
                     data = DogListResponse(
                         listOf(
-                            DogDTO(
+                            com.example.dogedex.core.api.dto.DogDTO(
                                 2, 2, "", "", "", "",
                                 "", "", "", "", ""
                             )
@@ -116,7 +116,7 @@ class DogRepositoryTest {
                         isSuccess = true,
                         data = DogListResponse(
                             listOf(
-                                DogDTO(
+                                com.example.dogedex.core.api.dto.DogDTO(
                                     2, 2, "", "", "", "",
                                     "", "", "", "", ""
                                 )
@@ -173,7 +173,7 @@ class DogRepositoryTest {
                     message = "",
                     isSuccess = true,
                     data = DogResponse(
-                        DogDTO(
+                        com.example.dogedex.core.api.dto.DogDTO(
                             2, 2, "", "", "", "",
                             "", "", "", "", ""
                         )
@@ -220,7 +220,7 @@ class DogRepositoryTest {
                     message = "error_getting_dog_by_ml_id",
                     isSuccess = false,
                     data = DogResponse(
-                        DogDTO(
+                        com.example.dogedex.core.api.dto.DogDTO(
                             2, 2, "", "", "", "",
                             "", "", "", "", ""
                         )
