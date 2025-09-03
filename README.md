@@ -1,6 +1,6 @@
 # Dogedex
 
-Aplicación parte del curso **Android Avanzado con Koltin**
+Aplicación parte del curso **Android Avanzado con Kotlin**
 
 Aplicación que lista varias razas de perros, los reconoce mediante la cámara y permite agregarlos a una lista de favoritos.
 
